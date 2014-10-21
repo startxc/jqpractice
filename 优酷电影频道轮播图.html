@@ -1,0 +1,93 @@
+<!doctype html>
+<head>
+	<meta charset="UTF-8">
+	<title>优酷电影频道轮播图</title>
+	<style type="text/css">
+		body{margin:0;}
+		#box{width:470px;height:150px;overflow:hidden;position:absolute;left:500px;top:100px;}
+		ul{margin:0;padding:0;}
+		li{list-style:none;}
+		#ad li{position:absolute;left:0;top:0;}
+		#ad .curr{z-index:1;}
+		#nav{position:absolute;right:10px;bottom:-10px;z-index:2;}
+		#nav li{width:30px;height:24px;background:#cccccc;color:#ffffff;text-align:center;line-height:24px;float:left;margin-left:5px;cursor:pointer;}
+		#nav li.active{background:red;}
+	</style>
+	<script type="text/javascript" src="jquery-1.11.1.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var curr_index = 0;
+			var target_index;
+			var timer = null;
+			var adLi = $("#ad").find("li");
+			var navLi = $("#nav").find("li");
+			
+			$("#nav").find("li").mouseover(function(){
+				var $curr_li = $("#nav").find(".active");
+				var $target_li = $(this);
+				curr_index = parseInt($curr_li.html())-1;
+				target_index = parseInt($target_li.html())-1;
+				if(curr_index == target_index) return false;			
+				startMove(curr_index,target_index);
+				curr_index = target_index;	
+			});
+
+			timer = setInterval(function(){
+				target_index = curr_index+1;
+				if(target_index == $("#ad").find("li").length){
+					target_index = 0;
+				}
+				startMove(curr_index,target_index);
+				curr_index = target_index;	
+			},2000);
+
+			$("#box").mouseover(function(){
+				clearInterval(timer);
+			}).mouseout(function(){
+				timer = setInterval(function(){
+					target_index = curr_index+1;
+					if(target_index == $("#ad").find("li").length){
+						target_index = 0;
+					}
+					startMove(curr_index,target_index);
+					curr_index = target_index;	
+				},2000);				
+			});
+
+			function startMove(curr_index,target_index){
+				navLi.eq(curr_index).attr("class","");
+				navLi.eq(target_index).attr("class","active");
+				if(curr_index < target_index){
+					adLi.eq(curr_index).stop().animate({"left":-470},function(){
+						$(this).attr("class","");
+					});
+					adLi.eq(target_index).css("left",470).attr("class","curr").stop().animate({"left":0});
+				}else{	
+					adLi.eq(curr_index).stop().animate({"left":470},function(){
+						$(this).attr("class","");
+					});
+					adLi.eq(target_index).attr("left",-470).attr("class","curr").stop().animate({"left":0});
+				}		
+			}
+		});
+	</script>
+</head>
+<body>
+	<div id="box">
+		<ul id="ad">
+			<li class="curr"><img src="./img/1.jpg"></li>
+			<li><img src="./img/2.jpg"></li>
+			<li><img src="./img/3.jpg"></li>
+			<li><img src="./img/4.jpg"></li>
+			<li><img src="./img/5.jpg"></li>
+		</ul>
+		<ol id="nav">
+			<li class="active">1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+		</ol>
+	</div>	
+</body>
+</html>
