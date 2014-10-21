@@ -49,7 +49,23 @@
 				}
 				var target_index = aIndex[Math.floor(Math.random()*aIndex.length)];
 
-				
+				var $curr_li = $("#box").find("li[index="+curr_index+"]");
+				var $target_li = $("#box").find("li[index="+target_index+"]");
+				$curr_li.attr("index",target_index);
+				$target_li.attr("index",curr_index);
+
+				var tmp_pos = [$curr_li.position().left,$curr_li.position().top];
+				$curr_li.animate({
+					"left":$target_li.position().left,
+					"top":$target_li.position().top
+				},function(){
+					$target_li.animate({
+						"left":tmp_pos[0],
+						"top":tmp_pos[1]
+					},function(){
+						startMove(target_index);
+					});
+				});
 
 			}
 			startMove(8);
