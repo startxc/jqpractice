@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>自动移动块</title>
+	<style type="text/css">
+		body{margin:0;}
+		ul{margin:0;padding:0}
+		li{list-style:none;}
+		img{border:none;vertical-align:top;}
+		#box{width:300px;height:300px;border:1px solid #000000;position:absolute;left:100px;top:100px;}
+		#box li{float:left;}
+	</style>
+	<script type="text/javascript" src="jquery-1.11.1.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var $aLi = $("#box").find("li");
+			var pos_arr = [];
+			for(var i=0;i<$aLi.length;i++){
+				$aLi.eq(i).attr("index",i);
+				pos_arr.push([$aLi.eq(i).position().left,$aLi.eq(i).position().top]);
+			}
+			for(var i=0;i<$aLi.length;i++){
+				$aLi.eq(i).css({
+					"position":"absolute",
+					"left":pos_arr[i][0],
+					"top":pos_arr[i][1]
+				});
+			}
+
+			var curr_index = 8;
+			function startMove(curr_index){
+				var left_index = curr_index-1;
+				var right_index = curr_index+1;
+				var up_index = curr_index-3;
+				var down_index = curr_index+3;
+				var aIndex = [];
+				if(left_index >=0 && left_index<=8){
+					aIndex.push(left_index);
+				}
+				if(right_index >=0 && right_index<=8){
+					aIndex.push(right_index);
+				}
+				if(up_index >=0 && up_index<=8){
+					aIndex.push(up_index);
+				}
+				if(down_index >=0 && down_index<=8){
+					aIndex.push(down_index);
+				}
+				var target_index = aIndex[Math.floor(Math.random()*aIndex.length)];
+
+				
+
+			}
+			startMove(8);
+		});
+	</script>
+</head>
+<body>
+	<ul id="box">
+		<li><img src="img/1.jpg" width="100" height="100" /></li>
+		<li><img src="img/2.jpg" width="100" height="100" /></li>
+		<li><img src="img/3.jpg" width="100" height="100" /></li>
+		<li><img src="img/4.jpg" width="100" height="100" /></li>
+		<li><img src="img/5.jpg" width="100" height="100" /></li>
+		<li><img src="img/1.jpg" width="100" height="100" /></li>
+		<li><img src="img/2.jpg" width="100" height="100" /></li>
+		<li><img src="img/3.jpg" width="100" height="100" /></li>
+		<li></li>
+	</ul>
+</body>
+</html>
