@@ -29,46 +29,49 @@
 			}
 
 			var curr_index = 8;
-			function startMove(curr_index){
-				var left_index = curr_index-1;
-				var right_index = curr_index+1;
-				var up_index = curr_index-3;
-				var down_index = curr_index+3;
-				var aIndex = [];
-				if(left_index >=0 && left_index<=8){
-					aIndex.push(left_index);
-				}
-				if(right_index >=0 && right_index<=8){
-					aIndex.push(right_index);
-				}
-				if(up_index >=0 && up_index<=8){
-					aIndex.push(up_index);
-				}
-				if(down_index >=0 && down_index<=8){
-					aIndex.push(down_index);
-				}
-				var target_index = aIndex[Math.floor(Math.random()*aIndex.length)];
+			function startMove(curr_index,directions){
 
+				var direction = directions[Math.floor(Math.random()*directions.length)];			
+				switch(direction){
+					case "left":var target_index = curr_index-1;break;
+					case "right":var target_index = curr_index+1;break;
+					case "up":var target_index = curr_index-3;break;
+					case "down":var target_index = curr_index+3;break;
+				}
+				
 				var $curr_li = $("#box").find("li[index="+curr_index+"]");
 				var $target_li = $("#box").find("li[index="+target_index+"]");
 				$curr_li.attr("index",target_index);
 				$target_li.attr("index",curr_index);
 
-				var tmp_pos = [$curr_li.position().left,$curr_li.position().top];
-				$curr_li.animate({
-					"left":$target_li.position().left,
-					"top":$target_li.position().top
+				var tmp_pos = [$target_li.position().left,$target_li.position().top];
+				$target_li.animate({
+					"left":$curr_li.position().left,
+					"top":$curr_li.position().top
 				},function(){
-					$target_li.animate({
+					$curr_li.animate({
 						"left":tmp_pos[0],
 						"top":tmp_pos[1]
 					},function(){
-						startMove(target_index);
+						var directions = [];
+						switch(tmp_pos[0]){
+							case 0:directions.push("right");break;
+							case 100:directions.push("left","right");break;
+							case 200:directions.push("left");break;
+						}
+						switch(tmp_pos[1]){
+							case 0:directions.push("down");break;
+							case 100:directions.push("up","down");break;
+							case 200:directions.push("up");break;
+						}
+						var except_direction = {"left":"right","right":"left","up":"down","down":"up"};
+						directions.splice($.inArray(except_direction[direction],directions),1);
+						startMove(target_index,directions);
 					});
 				});
 
 			}
-			startMove(8);
+			startMove(8,['left','up']);
 		});
 	</script>
 </head>
